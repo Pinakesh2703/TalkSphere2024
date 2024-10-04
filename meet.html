@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Conference</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            text-align: center;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        input, button {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            padding: 0.8rem 1.2rem;
+            border: none;
+            border-radius: 50px;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        input {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #meeting-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+
+        #error-message {
+            color: #f44336;
+            margin-top: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="join-form">
+        <h1>Enter Meeting ID</h1>
+        <input type="text" id="meeting-id" placeholder="Enter Meeting ID">
+        <button id="join-btn">Join Meeting</button>
+        <p id="error-message"></p>
+    </div>
+    <div id="meeting-container"></div>
+
+    <script>
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+
+        script.addEventListener("load", function (event) {
+            const joinBtn = document.getElementById('join-btn');
+            const meetingIdInput = document.getElementById('meeting-id');
+            const joinForm = document.getElementById('join-form');
+            const meetingContainer = document.getElementById('meeting-container');
+            const errorMessage = document.getElementById('error-message');
+
+            joinBtn.addEventListener('click', () => {
+                const meetingId = meetingIdInput.value.trim();
+                if (meetingId) {
+                    // In a real application, you would validate the meeting ID here
+                    // For this example, we'll consider any non-empty input as valid
+                    initializeMeeting(meetingId);
+                } else {
+                    errorMessage.textContent = "Please enter a valid Meeting ID";
+                    errorMessage.style.display = "block";
+                }
+            });
+
+            function initializeMeeting(meetingId) {
+                const config = {
+                    name: "Participant",
+                    meetingId: meetingId,
+                    apiKey: "dcd2b9d2-bb9a-44f5-bd4e-9fc8c4bba752",
+
+                    containerId: "meeting-container",
+
+                    micEnabled: true,
+                    webcamEnabled: true,
+                    participantCanToggleSelfWebcam: true,
+                    participantCanToggleSelfMic: true,
+
+                    chatEnabled: true,
+                    screenShareEnabled: true,
+
+                    theme: "DARK",
+                    layout: {
+                        type: "SPOTLIGHT",
+                        priority: "PIN",
+                    },
+                };
+
+                const meeting = new VideoSDKMeeting();
+                meeting.init(config);
+
+                // Hide the join form and show the meeting container
+                joinForm.style.display = 'none';
+                meetingContainer.style.display = 'block';
+            }
+        });
+
+        script.src =
+            "https://sdk.videosdk.live/rtc-js-prebuilt/0.3.42/rtc-js-prebuilt.js";
+        document.getElementsByTagName("head")[0].appendChild(script);
+    </script>
+</body>
+</html>
