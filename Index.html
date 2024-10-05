@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalkSphere - Video Calling Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.8;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Parallax Background */
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Section Styling */
+        .section {
+            text-align: center;
+            padding: 80px 0;
+        }
+        .section:nth-child(odd) {
+            background-color: #abd3f3; /* Light blue */
+        }
+        .section:nth-child(even) {
+            background-color: #ffe6e6; /* Light pink */
+        }
+
+        /* Parallax Backgrounds */
+        .bg1 {
+            background-image: url('bg1.jpg');
+            min-height: 100vh;
+        }
+        .bg2 {
+            background-image: url('bg2.jpg');
+            min-height: 100vh;
+        }
+
+        /* Caption Styling */
+        .caption {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            text-align: center;
+            color: #000;
+        }
+        .caption span.border {
+            background-color: #111;
+            color: #fff;
+            padding: 18px;
+            font-size: 25px;
+            letter-spacing: 10px;
+        }
+
+        /* Headings and Buttons */
+        h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #2c3e50;
+        }
+        .login-btn {
+            background-color: #e14e58;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .login-btn:hover {
+            background-color: #357ae8;
+        }
+
+        /* Flexbox Content */
+        .flex-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: stretch;
+            margin-top: 50px;
+        }
+        .text-content {
+            flex: 1;
+            min-width: 300px;
+            text-align: left;
+            padding-right: 40px;
+        }
+        .text-content p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .card-content {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        .card-content h3 {
+            font-size: 1.5rem;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        /* Footer Styling */
+        footer {
+            margin-top: -100vh;
+            height: 100vh;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 50px 0 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .footer-section {
+            flex: 1;
+            margin-right: 30px;
+            min-width: 200px;
+        }
+        .footer-section h3 {
+            color: #3498db;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .flex-content {
+                flex-direction: column;
+            }
+            .text-content, .card-content {
+                width: 100%;
+                padding: 0;
+                margin-bottom: 30px;
+            }
+            .section {
+                padding: 40px 0;
+            }
+            .content-section h2 {
+                font-size: 2rem;
+            }
+            .caption span.border {
+                font-size: 18px;
+                padding: 10px;
+            }
+            .login-btn {
+                font-size: 14px;
+                padding: 10px 16px;
+            }
+            .footer-section {
+                flex: 100%;
+                margin-right: 0;
+                margin-bottom: 30px;
+            }
+        }
+        @media (max-width: 480px) {
+            .caption span.border {
+                font-size: 16px;
+                padding: 8px;
+                letter-spacing: 5px;
+            }
+            .content-section h2 {
+                font-size: 1.8rem;
+            }
+            .card-content h3 {
+                font-size: 1.3rem;
+            }
+            .text-content p, .feature-list li, .agora-list li {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="parallax bg1">
+        <div class="caption">
+            <span class="border">TALKSPHERE</span>
+            <br><br>
+            <button class="login-btn" onclick="loginWithGoogle()">Use TalkSphere</button>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container content-section">
+            <h2>About TalkSphere</h2>
+            <div class="flex-content">
+                <div class="text-content">
+                    <p>TalkSphere is a cutting-edge video calling platform designed to bring people closer together, no matter where they are in the world. With crystal-clear audio and high-definition video, TalkSphere makes every conversation feel like you're in the same room.</p>
+                    <p>Our mission is to provide seamless, high-quality communication tools that enhance collaboration and personal connections across the globe.</p>
+                </div>
+                <div class="card-content">
+                    <h3>Why Choose TalkSphere?</h3>
+                    <ul class="feature-list">
+                        <li><span class="feature-icon">🌐</span> Global Connectivity</li>
+                        <li><span class="feature-icon">🔒</span> Secure Communications</li>
+                        <li><span class="feature-icon">🎥</span> HD Video Quality</li>
+                        <li><span class="feature-icon">🔊</span> Crystal Clear Audio</li>
+                        <li><span class="feature-icon">💼</span> Business-ready Features</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="parallax bg2">
+        <div class="caption">
+            <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">CONNECT ANYWHERE</span>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container content-section">
+            <h2>Features</h2>
+            <div class="flex-content">
+                <div class="text-content">
+                    <p>TalkSphere offers a comprehensive suite of features designed to enhance your video calling experience. From crystal-clear audio to advanced screen sharing capabilities, we've got everything you need for seamless communication.</p>
+                    <p>Whether you're connecting with family, collaborating with colleagues, or hosting large-scale virtual events, TalkSphere has the tools to make your interactions more engaging and productive.</p>
+                </div>
+                <div class="card-content">
+                    <h3>Key Features</h3>
+                    <ul class="feature-list">
+                        <li><span class="feature-icon">📹</span> High-quality video and audio</li>
+                        <li><span class="feature-icon">🖥️</span> Screen sharing capabilities</li>
+                        <li><span class="feature-icon">🏞️</span> Virtual backgrounds</li>
+                        <li><span class="feature-icon">👥</span> Group calls with up to 100 participants</li>
+                        <li><span class="feature-icon">🔐</span> End-to-end encryption for privacy</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container content-section">
+            <h2>Powered by Video SDK</h2>
+            <div class="flex-content">
+                <div class="text-content">
+                    <p>At the heart of TalkSphere's seamless video and audio calling experience is <strong>Video SDK</strong>, a powerful real-time communication solution that enables live interactions across the globe.</p>
+                    <p>Video SDK ensures that every call is enriched with cutting-edge technology, delivering an unparalleled communication experience that feels as natural as face-to-face interaction.</p>
+                </div>
+                <div class="card-content">
+                    <h3>Video SDK Features</h3>
+                    <ul class="agora-list">
+                        <li>High-quality, low-latency video and audio calls</li>
+                        <li>Scalable infrastructure for global reach</li>
+                        <li>Adaptive bitrate for optimal performance</li>
+                        <li>Advanced echo cancellation and noise suppression</li>
+                        <li>Multi-platform support (Web, iOS, Android)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="parallax bg1">
+        <div class="caption">
+            <span class="border">JOIN TALKSPHERE TODAY</span>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h3>About TalkSphere</h3>
+                    <p>TalkSphere is a cutting-edge video calling platform designed to bring people closer together, no matter where they are in the world.</p>
+                </div>
+                <div class="footer-section contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> pinakesh.chatto2016@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +91-9733725333</p>
+                </div>
+                <div class="footer-section links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="https://www.videosdk.live/">Video SDK</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section social">
+                    <h3>Connect With Us</h3>
+                    <a href="https://www.linkedin.com/in/pinakesh-vitb/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/Pinakesh2703" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TalkSphere. All rights reserved. | Designed by Pinakesh Chattopadhyay</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            var parallax = document.getElementsByClassName("parallax");
+            Array.from(parallax).forEach(function(element) {
+                var speed = 0.3;
+                var yPos = -(window.pageYOffset * speed);
+                element.style.backgroundPosition = '50% ' + yPos + 'px';
+            });
+        });
+
+        function loginWithGoogle() {
+            window.location.href = 'meet.html';
+        }
+    </script>
+</body>
+</html>
