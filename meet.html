@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalkSphere - Video Conference</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 80%);
+            transform: rotate(45deg);
+            pointer-events: none;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 2rem;
+            font-size: 2.2rem;
+            font-weight: 600;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        input {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            width: 100%;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 198, 255, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 198, 255, 0.4);
+        }
+
+        #meeting-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+
+        #error-message {
+            color: #ff6b6b;
+            margin-top: 1rem;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        #post-meeting-buttons {
+            display: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        #create-join-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #create-join-buttons button {
+            width: 48%;
+        }
+
+        #permission-container {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        #permission-container button {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="join-form">
+        <h1>TalkSphere</h1>
+        <div id="create-join-buttons">
+            <button id="create-btn">Create Meeting</button>
+            <button id="join-btn">Join Meeting</button>
+        </div>
+        <div class="input-group" style="display: none;">
+            <input type="text" id="meeting-id" placeholder="Enter Meeting ID">
+        </div>
+        <button id="start-join-btn" style="display: none;">Start Meeting</button>
+        <div id="permission-container">
+            <button id="camera-permission">Allow Camera</button>
+            <button id="mic-permission">Allow Microphone</button>
+            <button id="start-meeting">Start Meeting</button>
+        </div>
+        <p id="error-message"></p>
+        <div id="post-meeting-buttons" style="display: none;">
+            <button id="rejoin-btn">Rejoin Meeting</button>
+            <button id="home-btn">Go to Homepage</button>
+        </div>
+    </div>
+    <div id="meeting-container"></div>
+
+    <script>
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+
+        script.addEventListener("load", function (event) {
+            const createBtn = document.getElementById('create-btn');
+            const joinBtn = document.getElementById('join-btn');
+            const startJoinBtn = document.getElementById('start-join-btn');
+            const meetingIdInput = document.getElementById('meeting-id');
+            const joinForm = document.getElementById('join-form');
+            const meetingContainer = document.getElementById('meeting-container');
+            const errorMessage = document.getElementById('error-message');
+            const postMeetingButtons = document.getElementById('post-meeting-buttons');
+            const rejoinBtn = document.getElementById('rejoin-btn');
+            const homeBtn = document.getElementById('home-btn');
+            const createJoinButtons = document.getElementById('create-join-buttons');
+            const permissionContainer = document.getElementById('permission-container');
+            const cameraPermissionBtn = document.getElementById('camera-permission');
+            const micPermissionBtn = document.getElementById('mic-permission');
+            const startMeetingBtn = document.getElementById('start-meeting');
+
+            let currentMeetingId = '';
+            let cameraPermission = false;
+            let micPermission = false;
+
+            createBtn.addEventListener('click', () => {
+                currentMeetingId = generateMeetingId();
+                showPermissionButtons();
+            });
+
+            joinBtn.addEventListener('click', () => {
+                createJoinButtons.style.display = 'none';
+                meetingIdInput.parentElement.style.display = 'block';
+                startJoinBtn.style.display = 'block';
+            });
+
+            startJoinBtn.addEventListener('click', () => {
+                const meetingId = meetingIdInput.value.trim();
+                if (meetingId) {
+                    currentMeetingId = meetingId;
+                    showPermissionButtons();
+                } else {
+                    errorMessage.textContent = "Please enter a valid Meeting ID";
+                    errorMessage.style.display = "block";
+                }
+            });
+
+            cameraPermissionBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.mediaDevices.getUserMedia({ video: true });
+                    cameraPermission = true;
+                    cameraPermissionBtn.disabled = true;
+                    cameraPermissionBtn.textContent = "Camera Allowed";
+                } catch (error) {
+                    console.error("Camera permission denied:", error);
+                }
+            });
+
+            micPermissionBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.mediaDevices.getUserMedia({ audio: true });
+                    micPermission = true;
+                    micPermissionBtn.disabled = true;
+                    micPermissionBtn.textContent = "Microphone Allowed";
+                } catch (error) {
+                    console.error("Microphone permission denied:", error);
+                }
+            });
+
+            startMeetingBtn.addEventListener('click', () => {
+                initializeMeeting(currentMeetingId);
+            });
+
+            rejoinBtn.addEventListener('click', () => {
+                if (currentMeetingId) {
+                    showPermissionButtons();
+                }
+            });
+
+            homeBtn.addEventListener('click', () => {
+                window.location.reload();
+            });
+
+            function generateMeetingId() {
+                return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            }
+
+            function showPermissionButtons() {
+                createJoinButtons.style.display = 'none';
+                meetingIdInput.parentElement.style.display = 'none';
+                startJoinBtn.style.display = 'none';
+                permissionContainer.style.display = 'block';
+            }
+
+            function initializeMeeting(meetingId) {
+                const config = {
+                    name: "Participant",
+                    meetingId: meetingId,
+                    apiKey: "dcd2b9d2-bb9a-44f5-bd4e-9fc8c4bba752",
+
+                    containerId: "meeting-container",
+
+                    micEnabled: micPermission,
+                    webcamEnabled: cameraPermission,
+                    participantCanToggleSelfWebcam: true,
+                    participantCanToggleSelfMic: true,
+
+                    chatEnabled: true,
+                    screenShareEnabled: true,
+
+                    theme: "DARK",
+                    layout: {
+                        type: "SPOTLIGHT",
+                        priority: "PIN",
+                    },
+                };
+
+                const meeting = new VideoSDKMeeting();
+                meeting.init(config);
+
+                joinForm.style.display = 'none';
+                meetingContainer.style.display = 'block';
+
+                meeting.on("meeting-left", () => {
+                    meetingContainer.style.display = 'none';
+                    joinForm.style.display = 'block';
+                    postMeetingButtons.style.display = 'block';
+                    createJoinButtons.style.display = 'none';
+                    meetingIdInput.parentElement.style.display = 'none';
+                    startJoinBtn.style.display = 'none';
+                    permissionContainer.style.display = 'none';
+                });
+            }
+        });
+
+        script.src =
+            "https://sdk.videosdk.live/rtc-js-prebuilt/0.3.42/rtc-js-prebuilt.js";
+        document.getElementsByTagName("head")[0].appendChild(script);
+    </script>
+</body>
+</html>
